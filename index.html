@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Evolution</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Хедер -->
+        <header class="game-header">
+            <div class="prestige-display">
+                <span class="pixel-text">Престиж: </span>
+                <span id="prestige-count" class="pixel-text">0</span>
+            </div>
+            <div class="resources">
+                <div class="resource">
+                    <span class="pixel-text">⚡</span>
+                    <span id="energy-count" class="pixel-text">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Основной игровой экран -->
+        <main class="game-main">
+            <div class="universe-container">
+                <div id="quantum-object" class="quantum-object">
+                    <div class="pixel-core"></div>
+                    <div class="energy-rings">
+                        <div class="ring ring-1"></div>
+                        <div class="ring ring-2"></div>
+                        <div class="ring ring-3"></div>
+                    </div>
+                </div>
+                <div class="particles-container" id="particles"></div>
+            </div>
+
+            <div class="stage-info">
+                <h2 id="stage-name" class="pixel-text">Планковская длина</h2>
+                <div class="size-display">
+                    <span class="pixel-text">Размер: </span>
+                    <span id="current-size" class="pixel-text">1.6e-35 м</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <span id="progress-text" class="pixel-text">0%</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Панель действий -->
+        <section class="actions-panel">
+            <button id="quantum-click" class="pixel-button primary big-button">
+                <span class="button-icon">⚡</span>
+                <span class="pixel-text">Квантовая флуктуация</span>
+                <div class="click-power">+<span id="click-power">1</span>⚡</div>
+            </button>
+        </section>
+
+        <!-- Навигация -->
+        <nav class="game-nav">
+            <button class="nav-button active" data-tab="evolution">Эволюция</button>
+            <button class="nav-button" data-tab="development">Развитие</button>
+            <button class="nav-button" data-tab="prestige">Престиж</button>
+            <button class="nav-button" data-tab="stats">Статистика</button>
+        </nav>
+
+        <!-- Вкладки -->
+        <div class="tab-content active" id="tab-evolution">
+            <div class="bonus-panel">
+                <h3 class="pixel-text">Текущие бонусы</h3>
+                <div class="bonus-grid">
+                    <div class="bonus-item">
+                        <span class="pixel-text">Сила клика:</span>
+                        <span id="bonus-click" class="pixel-text">1⚡</span>
+                    </div>
+                    <div class="bonus-item">
+                        <span class="pixel-text">Авто-рост:</span>
+                        <span id="bonus-auto" class="pixel-text">0⚡/с</span>
+                    </div>
+                    <div class="bonus-item">
+                        <span class="pixel-text">Множитель престижа:</span>
+                        <span id="bonus-prestige" class="pixel-text">1.00x</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-expanded">
+                <h3 class="pixel-text">Статистика</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="pixel-text">Всего кликов:</span>
+                        <span id="stat-total-clicks" class="pixel-text">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="pixel-text">Время игры:</span>
+                        <span id="stat-play-time" class="pixel-text">0:00</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="pixel-text">Макс. размер:</span>
+                        <span id="stat-max-size" class="pixel-text">1.6e-35 м</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="pixel-text">Этапов пройдено:</span>
+                        <span id="stat-stages-completed" class="pixel-text">0/24</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-development">
+            <!-- Секция авто-роста -->
+            <div class="upgrade-section">
+                <h3 class="pixel-text">Авто-рост</h3>
+                <div class="upgrade-item" id="auto-growth-upgrade">
+                    <div class="upgrade-header">
+                        <span class="pixel-text">Автоматическая эволюция</span>
+                        <span class="upgrade-level">Ур. <span id="auto-level">0</span></span>
+                    </div>
+                    <div class="upgrade-description">
+                        Автоматически увеличивает размер и генерирует энергию
+                    </div>
+                    <div class="upgrade-stats">
+                        <span>Текущая скорость: <span id="auto-speed">0</span>⚡/с</span>
+                        <span>Эффективность: <span id="auto-efficiency">100</span>%</span>
+                    </div>
+                    <button class="pixel-button secondary upgrade-button" id="buy-auto">
+                        Купить за <span id="auto-cost">1000</span>⚡
+                    </button>
+                </div>
+            </div>
+
+            <!-- Секция улучшений клика -->
+            <div class="upgrade-section">
+                <h3 class="pixel-text">Улучшения клика</h3>
+                <div class="upgrades-grid" id="upgrades-grid">
+                    <!-- Улучшения будут добавляться через JS -->
+                </div>
+            </div>
+
+            <!-- Секция исследований -->
+            <div class="upgrade-section">
+                <h3 class="pixel-text">Исследования</h3>
+                <div class="research-grid" id="research-grid">
+                    <!-- Исследования будут добавляться через JS -->
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-prestige">
+            <div class="prestige-info">
+                <h3 class="pixel-text">Большой Взрыв</h3>
+                <div class="prestige-stats">
+                    <div class="prestige-stat">
+                        <span class="pixel-text">Текущий престиж:</span>
+                        <span id="current-prestige" class="pixel-text">0</span>
+                    </div>
+                    <div class="prestige-stat">
+                        <span class="pixel-text">Общий множитель:</span>
+                        <span id="total-multiplier" class="pixel-text">1.00x</span>
+                    </div>
+                    <div class="prestige-stat">
+                        <span class="pixel-text">Следующий бонус:</span>
+                        <span id="next-bonus" class="pixel-text">+0%</span>
+                    </div>
+                </div>
+                
+                <div class="prestige-requirements">
+                    <h4 class="pixel-text">Требования:</h4>
+                    <div class="requirement" id="size-requirement">
+                        <span>Размер больше Солнца</span>
+                        <span id="size-status" class="status">❌</span>
+                    </div>
+                    <div class="requirement" id="energy-requirement">
+                        <span>10000⚡ энергии</span>
+                        <span id="energy-status" class="status">❌</span>
+                    </div>
+                </div>
+
+                <button id="big-bang" class="pixel-button prestige" disabled>
+                    <span class="button-icon">💥</span>
+                    <span class="pixel-text">Большой Взрыв</span>
+                </button>
+
+                <div class="prestige-history">
+                    <h4 class="pixel-text">История взрывов</h4>
+                    <div id="prestige-history-list" class="history-list">
+                        <!-- История будет добавляться через JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-stats">
+            <div class="stats-container">
+                <h3 class="pixel-text">Статистика игрока</h3>
+                
+                <div class="player-stats">
+                    <div class="stat-row">
+                        <span class="pixel-text">Общее время игры:</span>
+                        <span id="stat-total-time" class="pixel-text">0:00</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="pixel-text">Всего кликов:</span>
+                        <span id="stat-all-clicks" class="pixel-text">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="pixel-text">Всего энергии:</span>
+                        <span id="stat-total-energy" class="pixel-text">0⚡</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="pixel-text">Максимальный размер:</span>
+                        <span id="stat-all-max-size" class="pixel-text">1.6e-35 м</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="pixel-text">Больших Взрывов:</span>
+                        <span id="stat-big-bangs" class="pixel-text">0</span>
+                    </div>
+                </div>
+
+                <div class="ranking-section">
+                    <h3 class="pixel-text">Рейтинг игроков</h3>
+                    <div class="ranking-list" id="ranking-list">
+                        <!-- Рейтинг будет добавляться через JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Уведомления -->
+    <div id="notifications" class="notifications"></div>
+
+    <!-- Индикатор сохранения -->
+    <div id="save-indicator" class="save-indicator"></div>
+
+    <script src="game.js"></script>
+</body>
+</html>
